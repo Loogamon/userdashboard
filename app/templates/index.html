@@ -1,0 +1,55 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>Home Page</title> 
+	{% load static %}
+	{% load custom_tags %}
+    <!-- Le styles -->
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+	<script src="{% static 'js/script.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script> 	
+</head> 
+<body>
+	{% include 'navbar.html' %} 
+	<div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Welcome to the Test</h1>
+        <p>We're going to build a cool application using a MVC framework! This application was built with the Vilage 88 folks!</p>
+        <p><a href="/register" class="btn btn-primary btn-large">Start &raquo;</a></p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Manage Users</h2>
+           <p>Using this application, you'll learn how to add, remove, and edit users for the application.</p>
+          <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+        </div>
+        <div class="span4">
+          <h2>Leave Messages</h2>
+           <p>Users will be able to leave a message to another user using this application.</p>
+          <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+       </div>
+        <div class="span4">
+          <h2>Edit User Information</h2>
+          <p>Admins will be able to edit another user's information (email address, name, etc.)</p>
+          <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+        </div>
+      </div>
+
+      {% include 'footer.html' %} 
+
+    </div> <!-- /container -->
+</body> 
+</html> 

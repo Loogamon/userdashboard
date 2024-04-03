@@ -1,0 +1,28 @@
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Test App</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li {% if pg == "home" %}class="active"{% endif %}><a href="/">Home</a></li>
+			  {% if me != None %}
+              <li {% if pg == "dashboard" %}class="active"{% endif %}><a href="/dashboard" >Dashboard</a></li>
+              <li {% if pg == "profile" %}class="active"{% endif %}><a href="/users/edit">Profile</a></li>
+			  {% endif %}
+            </ul>
+			<ul class="nav pull-right">
+				{% if me == None %}
+				<li {% if pg == "signin" %}class="active"{% endif %}><a href="/signin">Sign in</a></li>
+				{% else %}
+				<li><a href="/logout">Logout ({{ me.first_name }} {{ me.last_name }})</a></li>
+				{% endif %}
+			</ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>

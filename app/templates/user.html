@@ -1,0 +1,127 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>Home Page</title> 
+	{% load static %}
+	{% load custom_tags %}
+    <!-- Le styles -->
+    <style type="text/css">
+      body {
+        padding-top: 70px;
+        padding-bottom: 40px;
+      }
+    </style>
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+	<script src="{% static 'js/script.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script> 	
+</head> 
+<body>
+	{% include 'navbar.html' %} 
+	<div class="container">
+      
+	<h1 style="padding-bottom: 20px">{{ user.first_name }} {{ user.last_name }}</h1>
+	<div class="row">
+		<div class="span12">
+			<div class="well">
+				
+				<table style="width: 50%;">
+					<tr>
+						<td><strong>Registered at:</strong></td>
+						<td>{{ user.created_at }}</td>
+					</tr>
+					<tr>
+						<td><strong>User ID:</strong></td>
+						<td>{{ user.id }}</td>
+					</tr>
+					<tr>
+						<td><strong>Email Address:</strong></td>
+						<td>{{ user.email }}</td>
+					</tr>
+					{% if user.desc|length > 0 %}
+					<tr>
+						<td><strong>Description:</strong></td>
+						<td>{{ user.desc }}</td>
+					</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<h2 style="padding-bottom: 20px">Comments</h2>
+			<div class="well" style="padding-bottom: 0px;">
+				<h3 style="padding-bottom: 5px">Post a Comment</h3>
+				{% if msg.mp|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.mp %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/msgs/profile" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="msg_userid" value="{{ user.id }}">
+					<textarea name="msg_text" style="width: 98%; margin: 0; resize: vertical;" cols=50 rows=4></textarea>
+					<br><button style="margin-top: 15px;" type="submit" class="btn btn-primary">Post</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% if msg.mm|length > 0 %}
+	<div class="alert alert-block alert-error">
+		<h4 class="alert-heading">Errors Found:</h4>
+		<ul>
+			{% for m in msg.mm %}
+			<li>{{ m }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	{% for i in comments %}
+	<div class="row">
+		<div class="span12">
+			<div class="well">
+				<div class="butt">
+					<h3 style="padding-bottom: 10px"><a href="/users/show/{{ i.poster.id }}">{{ i.poster.first_name }} {{ i.poster.last_name }}</a> wrote:</h3>
+					<p><em>(<span title="{{ i.created_at }}">Posted {{ i.created_at|timesince }} ago</span>{% if i.poster.id == me.id %}, <a href="/comments/delete/{{ i.id }}">Delete</a>{% endif %})</em></p>
+				</div>
+				<p>{{ i.text }}</p>
+			</div>
+		</div>
+		{% for j in i.replies.all %}
+		<div class="span11" style="float: right;">
+			<div class="well">
+				<div class="butt">
+					<h4 style="padding-bottom: 10px"><a href="/users/show/{{ j.poster.id }}">{{ j.poster.first_name }} {{ j.poster.last_name }}</a> wrote:</h3>
+					<p><em>(<span title="{{ j.created_at }}">Posted {{ j.created_at|timesince }} ago</span>{% if j.poster.id == me.id %}, <a href="/subcomments/delete/{{ j.id }}">Delete</a>{% endif %})</em></p>
+				</div>
+				<p>{{ j.text }}</p>
+			</div>
+		</div>
+		{% endfor %}
+		<div class="span11" style="float: right;">
+			<div class="well" style="padding-bottom: 0px;">
+				<!-- <h4 style="padding-bottom: 10px">Reply to Comment</h4> -->
+				<form action="/post/msgs/message" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="msg_id" value="{{ i.id }}">
+					<textarea name="msg_text" style="width: 98%; margin: 0; resize: vertical;" cols=50 rows=4></textarea>
+					<br><button style="margin-top: 15px;" type="submit" class="btn btn-primary">Reply</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+
+    {% include 'footer.html' %} 
+
+    </div> <!-- /container -->
+</body> 
+</html> 

@@ -1,0 +1,163 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>Home Page</title> 
+	{% load static %}
+	{% load custom_tags %}
+    <!-- Le styles -->
+    <style type="text/css">
+      body {
+        padding-top: 70px;
+        padding-bottom: 40px;
+      }
+    </style>
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+	<script src="{% static 'js/script.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script> 	
+</head> 
+<body>
+	{% include 'navbar.html' %} 
+	<div class="container">
+      
+	<h1 style="padding-bottom: 20px">{{ pg_title }}</h1>
+	{% if layout == 0 %}
+	<div class="row">
+		<div class="span6">
+			<div class="well">
+				<h2 style="margin-bottom: 10px;">Edit Information</h2>
+				{% if msg.uei|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.uei %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/users/edit/info" method="post">
+					{% csrf_token %}
+					<label for="user_email">Email Address:</label>
+					<input type="text" class="span3" id="user_email" name="user_email" value="{{ me.email }}" placeholder="example@gmail.com">
+					<label for="user_fname">First Name:</label>
+					<input type="text" class="span3" id="user_fname" name="user_fname" value="{{ me.first_name }}" placeholder="John">
+					<label for="user_lname">Last Name:</label>
+					<input type="text" class="span3" id="user_lname" name="user_lname" value="{{ me.last_name }}" placeholder="Smith">
+					<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="well">
+				<h2 style="margin-bottom: 10px;">Change Password</h2>
+				{% if msg.uep|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.uep %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/users/edit/password" method="post">
+					{% csrf_token %}
+					<label for="user_password1">Password:</label>
+					<input type="password" class="span3" id="user_password1" name="user_password1" placeholder="********">
+					<label for="user_password2">Confirm Password:</label>
+					<input type="password" class="span3" id="user_password2" name="user_password2" placeholder="********">
+					<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="well">
+				<h2 style="margin-bottom: 10px;">Edit Description</h2>
+				{% if msg.ued|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.ued %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/users/edit/desc" method="post">
+					{% csrf_token %}
+					<textarea name="user_desc" style="width: 98%; margin: 0; resize: vertical;" cols=50 rows=4>{{ me.desc }}</textarea>
+					<br><button style="margin-top: 15px;" type="submit" class="btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+    {% endif %}    
+    {% if layout == 1 %}
+	<div class="row">
+		<div class="span6">
+			<div class="well">
+				<h2 style="margin-bottom: 10px;">Edit Information</h2>
+				{% if msg.aei|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.aei %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/admins/edit/info" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="user_id" value="{{ user.id }}">
+					<label for="user_email">Email Address:</label>
+					<input type="text" class="span3" id="user_email" name="user_email" value="{{ user.email }}" placeholder="example@gmail.com">
+					<label for="user_fname">First Name:</label>
+					<input type="text" class="span3" id="user_fname" name="user_fname" value="{{ user.first_name }}" placeholder="John">
+					<label for="user_lname">Last Name:</label>
+					<input type="text" class="span3" id="user_lname" name="user_lname" value="{{ user.last_name }}" placeholder="Smith">
+					<label for="user_level">User Level:</label>
+					<select id="user_level" name="user_level" class="span3">
+						<option value="normal" {% if not user.auth_level == 9 %}selected{% endif %}>Normal</option>
+						<option value="admin" {% if user.auth_level == 9 %}selected{% endif %}>Admin</option>
+					</select>
+					<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="well">
+				<h2 style="margin-bottom: 10px;">Change Password</h2>
+				{% if msg.aep|length > 0 %}
+				<div class="alert alert-block alert-error">
+					<h4 class="alert-heading">Errors Found:</h4>
+					<ul>
+						{% for m in msg.aep %}
+						<li>{{ m }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+				<form action="/post/admins/edit/password" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="user_id" value="{{ user.id }}">
+					<label for="user_password1">Password:</label>
+					<input type="password" class="span3" id="user_password1" name="user_password1" placeholder="********">
+					<label for="user_password2">Confirm Password:</label>
+					<input type="password" class="span3" id="user_password2" name="user_password2" placeholder="********">
+					<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% endif %}   
+	{% include 'footer.html' %} 
+
+    </div> <!-- /container -->
+</body> 
+</html> 

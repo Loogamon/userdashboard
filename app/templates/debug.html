@@ -1,0 +1,283 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>Debug Page</title> 
+	{% load static %}
+	{% load custom_tags %}
+	<link rel="stylesheet" href="{% static 'css/testform_style.css' %}"> 
+	<script src="{% static 'js/script.js' %}"></script> 
+</head> 
+<body> 
+	<div class="top">
+		<div class="butt">
+			<h1>Welcome, {{ me.first_name }}!</h1> 
+			<p><a href="/">Home</a> | <a href="/logout">Logout</a></p>
+		</div>
+		<hr>
+	</div>
+	<div class="tablemanners">
+		<table style="width: 750px;">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Date Created</th>
+				<th>Type</th>
+				<th>Action</th>
+			</tr>
+			{% for i in users %}
+			<tr>
+				<td>{{ i.id }}</td>
+				<td>{{ i.first_name }} {{ i.last_name }}</td>
+				<td>{{ i.email }}</td>
+				<td>{{ i.created_at }}</td>
+				<td>{{ i.auth_level|custom_userauth }}</td>
+				<td><a href="javascript:delete_this({{ i.id }}, '{{ i.first_name }} {{ i.last_name }}', 1)">Delete</a></td>
+			</tr>
+			{% empty %}
+			<tr>
+				<td colspan=5><em>(Empty Table)</em></td>
+			</tr>
+			{% endfor %}
+		</table>
+		<table style="width: 750px; margin-top: 10px">
+			<tr>
+				<th>ID</th>
+				<th>Text</th>
+				<th>Date Created</th>
+				<th>Poster ID</th>
+				<th>User ID</th>
+			</tr>
+			{% for i in comments %}
+			<tr>
+				<td>{{ i.id }}</td>
+				<td>{{ i.text}}</td>
+				<td>{{ i.created_at }}</td>
+				<td>{{ i.poster.id }}</td>
+				<td>{{ i.user.id }}</td>
+			</tr>
+			{% empty %}
+			<tr>
+				<td colspan=5><em>(Empty Table)</em></td>
+			</tr>
+			{% endfor %}
+		</table>
+		<table style="width: 750px; margin-top: 10px">
+			<tr>
+				<th>ID</th>
+				<th>Text</th>
+				<th>Date Created</th>
+				<th>Poster ID</th>
+				<th>Comment ID</th>
+			</tr>
+			{% for i in subcomments %}
+			<tr>
+				<td>{{ i.id }}</td>
+				<td>{{ i.text}}</td>
+				<td>{{ i.created_at }}</td>
+				<td>{{ i.poster.id }}</td>
+				<td>{{ i.parent_comment.id }}</td>
+			</tr>
+			{% empty %}
+			<tr>
+				<td colspan=5><em>(Empty Table)</em></td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<h2>Admin Controls</h2>
+	
+	<h3>Add a User</h3>
+	{% for m in msg.aa %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/admins/add?q=debug" method="post">
+		{% csrf_token %}
+		<label>Email: </label>
+		<input type="text" name="user_email"><br>
+		<label>First Name: </label>
+		<input type="text" name="user_fname"><br>
+		<label>Last Name: </label>
+		<input type="text" name="user_lname"><br>
+		<label>Password: </label>
+		<input type="password" name="user_password1"><br>
+		<label>Confirm Password: </label>
+		<input type="password" name="user_password2"><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	<h3>Edit User</h3>
+	
+	<h4>Information</h4>
+	{% for m in msg.aei %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/admins/edit/info?q=debug" method="post">
+		{% csrf_token %}
+		<label>User ID: </label>
+		<input type="number" name="user_id" value="1"><br>
+		<label>Email: </label>
+		<input type="text" name="user_email"><br>
+		<label>First Name: </label>
+		<input type="text" name="user_fname"><br>
+		<label>Last Name: </label>
+		<input type="text" name="user_lname"><br>
+		<label>User Level: </label>
+		<select name="user_level">
+			<option value="normal">Normal</option>
+			<option value="admin">Admin</option>
+		</select><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	<h4>Password</h4>
+	{% for m in msg.aep %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/admins/edit/password?q=debug" method="post">
+		{% csrf_token %}
+		<label>User ID: </label>
+		<input type="number" name="user_id" value="1"><br>
+		<label>Password: </label>
+		<input type="password" name="user_password1"><br>
+		<label>Confirm Password: </label>
+		<input type="password" name="user_password2"><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	
+	<h2>Edit User Controls</h2>
+	
+	<h3>Information</h3>
+	{% for m in msg.uei %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/users/edit/info?q=debug" method="post">
+		{% csrf_token %}
+		<label>Email: </label>
+		<input type="text" name="user_email" value="{{ me.email }}"><br>
+		<label>First Name: </label>
+		<input type="text" name="user_fname" value="{{ me.first_name }}"><br>
+		<label>Last Name: </label>
+		<input type="text" name="user_lname" value="{{ me.last_name }}"><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	<h3>Password</h3>
+	{% for m in msg.uep %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/users/edit/password?q=debug" method="post">
+		{% csrf_token %}
+		<label>Password: </label>
+		<input type="password" name="user_password1"><br>
+		<label>Confirm Password: </label>
+		<input type="password" name="user_password2"><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	<h3>Description</h3>
+	{% for m in msg.ued %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/users/edit/desc?q=debug" method="post">
+		{% csrf_token %}
+		<textarea name="user_desc" cols=50 rows=4>{{ me.desc }}</textarea><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	
+	<h2>Add Message Controls</h2>
+	
+	<h3>To Profile</h3>
+	{% for m in msg.mp %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/msgs/profile?q=debug" method="post">
+		{% csrf_token %}
+		<label>User ID: </label>
+		<input type="number" name="msg_userid" value="1"><br>
+		<textarea name="msg_text" cols=50 rows=4></textarea><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+	<h3>To Message</h3>
+	{% for m in msg.mm %}
+	{% if forloop.first %}
+			<div class="error">
+				<ul>
+		{% endif %}
+					<li>{{ m }}</li>
+		{% if forloop.last %}
+				</ul>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<form action="/post/msgs/message?q=debug" method="post">
+		{% csrf_token %}
+		<label>Message ID: </label>
+		<input type="number" name="msg_id" value="1"><br>
+		<textarea name="msg_text" cols=50 rows=4></textarea><br>
+		<input class="button" type="submit" value="Submit">
+	</form>
+	
+</body> 
+</html> 

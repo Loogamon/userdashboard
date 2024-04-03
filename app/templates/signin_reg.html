@@ -1,0 +1,114 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>Home Page</title> 
+	{% load static %}
+	{% load custom_tags %}
+    <!-- Le styles -->
+    <style type="text/css">
+      body {
+        padding-top: 70px;
+        padding-bottom: 40px;
+      }
+    </style>
+	<link rel="stylesheet" href="{% static 'css/custom.css' %}"> 
+	<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> 
+	<script src="{% static 'js/script.js' %}"></script>
+	<script src="{% static 'js/bootstrap.js' %}"></script> 	
+</head> 
+<body>
+	{% include 'navbar.html' %} 
+	<div class="container">
+	{% if pg_type == 2 %}
+      
+	<h1 style="padding-bottom: 20px">Register</h1>
+	{% if msg.reg|length > 0 %}
+	<div class="alert alert-block alert-error">
+		<h4 class="alert-heading">Errors Found:</h4>
+		<ul>
+			{% for m in msg.reg %}
+			<li>{{ m }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<form action="/users/reg" method="post">
+		{% csrf_token %}
+		<label for="user_email">Email Address:</label>
+		<input type="text" class="span3" id="user_email" name="user_email" value="{{ msg.reg_prev_email.0 }}" placeholder="example@gmail.com">
+		<label for="user_fname">First Name:</label>
+		<input type="text" class="span3" id="user_fname" name="user_fname" value="{{ msg.reg_prev_fname.0 }}" placeholder="John">
+		<label for="user_lname">Last Name:</label>
+		<input type="text" class="span3" id="user_lname" name="user_lname" value="{{ msg.reg_prev_lname.0 }}" placeholder="Smith">
+		<label for="user_password">Password:</label>
+		<input type="password" class="span3" id="user_password" name="user_password" placeholder="********">
+		<label for="user_password2">Confirm Password:</label>
+		<input type="password" class="span3" id="user_password2" name="user_password2" placeholder="********">
+		<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Register</button>
+	</form>
+	<p><a href="signin">Already have an account? Login.</a></p>
+	
+	{% endif %}
+	{% if pg_type == 1 %}
+	
+	<h1 style="padding-bottom: 20px">Sign in</h1>
+	{% if msg.login|length > 0 %}
+	<div class="alert alert-block alert-error">
+		<h4 class="alert-heading">Errors Found:</h4>
+		<ul>
+			{% for m in msg.login %}
+			<li>{{ m }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<form action="/users/login" method="post">
+		{% csrf_token %}
+		<label for="user_email">Email Address:</label>
+		<input type="text" class="span3" id="user_email" name="user_email" value="{{ msg.login_prev_email.0 }}" placeholder="example@gmail.com">
+		<label for="user_password">Password:</label>
+		<input type="password" class="span3" id="user_password" name="user_password" placeholder="********">
+		<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Sign in</button>
+	</form>
+	<p><a href="/register">Don't have an account? Register.</a></p>
+	
+	{% endif %}
+	
+	{% if pg_type == 3 %}
+      
+	<h1 style="padding-bottom: 20px">Add a New User</h1>
+	{% if msg.aa|length > 0 %}
+	<div class="alert alert-block alert-error">
+		<h4 class="alert-heading">Errors Found:</h4>
+		<ul>
+			{% for m in msg.aa %}
+			<li>{{ m }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+	<form action="/post/admins/add" method="post">
+		{% csrf_token %}
+		<label for="user_email">Email Address:</label>
+		<input type="text" class="span3" id="user_email" name="user_email" value="{{ msg.reg_prev_email.0 }}" placeholder="example@gmail.com">
+		<label for="user_fname">First Name:</label>
+		<input type="text" class="span3" id="user_fname" name="user_fname" value="{{ msg.reg_prev_fname.0 }}" placeholder="John">
+		<label for="user_lname">Last Name:</label>
+		<input type="text" class="span3" id="user_lname" name="user_lname" value="{{ msg.reg_prev_lname.0 }}" placeholder="Smith">
+		<label for="user_password1">Password:</label>
+		<input type="password" class="span3" id="user_password1" name="user_password1" placeholder="********">
+		<label for="user_password2">Confirm Password:</label>
+		<input type="password" class="span3" id="user_password2" name="user_password2" placeholder="********">
+		<br><button style="margin-top: 5px;" type="submit" class="btn btn-primary">Create</button>
+	</form>
+	
+	{% endif %}
+      
+        
+    {% include 'footer.html' %} 
+
+    </div> <!-- /container -->
+</body> 
+</html> 
