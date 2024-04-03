@@ -1,0 +1,4 @@
+Django
+bcrypt
+mysqlclient
+gunicorn
